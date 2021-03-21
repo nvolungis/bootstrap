@@ -1,0 +1,44 @@
+schema {
+  query: RootQueryType
+  mutation: RootMutationType
+}
+
+input CreateStockInput {
+  clientMutationId: String!
+  stock: StockInputObject
+}
+
+type CreateStockPayload {
+  clientMutationId: String!
+  stock: Stock
+}
+
+interface Node {
+  """The ID of the object."""
+  id: ID!
+}
+
+type RootMutationType {
+  """A mutation that inserts a stock into the database"""
+  createStock(input: CreateStockInput!): CreateStockPayload
+}
+
+type RootQueryType {
+  """Get all stocks"""
+  stocks: [Stock]
+}
+
+type Stock implements Node {
+  """The ID of an object"""
+  id: ID!
+  name: String
+  price: Float
+  ticker: String
+}
+
+input StockInputObject {
+  name: String!
+  price: Float
+  ticker: String!
+}
+

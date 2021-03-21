@@ -49,6 +49,12 @@ defmodule ServerWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
+  plug CORSPlug,
+    origin: ["http://localhost:3000"],
+    headers: [
+      "Content-Type"
+    ]
+
   plug Plug.Session, @session_options
   plug ServerWeb.Router
 end
