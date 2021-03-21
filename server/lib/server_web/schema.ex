@@ -8,18 +8,10 @@ defmodule ServerWeb.Schema do
   node interface do
     resolve_type fn
       %Server.Portfolio.Stock{}, _ ->
-        IO.inspect("what up")
         :stock
       _, _ ->
-        IO.inspect("no match")
-        :stock
+        nil
     end
-  end
-
-  input_object :stock_input_object do
-    field :name, non_null(:string)
-    field :ticker, non_null(:string)
-    field :price, :float
   end
 
   mutation do
@@ -41,5 +33,4 @@ defmodule ServerWeb.Schema do
       resolve &ServerWeb.Resolvers.Content.list_stocks/2
     end
   end
-
 end

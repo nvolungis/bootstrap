@@ -7,4 +7,10 @@ defmodule ServerWeb.Schema.ContentTypes do
     field :ticker, :string
     field :price, :float
   end
+
+  input_object :stock_input_object do
+    field :name, non_null(:string)
+    field :ticker, non_null(:string)
+    field :price, :float
+  end
 end
