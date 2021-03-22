@@ -9,6 +9,9 @@ defmodule ServerWeb.Schema do
     resolve_type fn
       %Server.Portfolio.Stock{}, _ ->
         :stock
+
+      %Server.Account.User{}, _ ->
+        :user
       _, _ ->
         nil
     end
@@ -23,7 +26,27 @@ defmodule ServerWeb.Schema do
       output do
         field :stock, :stock
       end
-      resolve &ServerWeb.Resolvers.Content.create_stock/2
+      resolve &Resolvers.Content.create_stock/2
+    end
+
+    payload field :create_user do
+      input do
+        field :user, :user_input_object
+      end
+      output do
+        field :user, :user
+      end
+      resolve &Resolvers.Content.create_user/2
+    end
+
+    payload field :login do
+      input do
+        field :login, :login_input_object
+      end
+      output do
+        field :token, :string
+      end
+      resolve &Resolvers.Content.login/2
     end
   end
 

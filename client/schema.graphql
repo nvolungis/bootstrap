@@ -13,6 +13,16 @@ type CreateStockPayload {
   stock: Stock
 }
 
+input CreateUserInput {
+  clientMutationId: String!
+  user: UserInputObject
+}
+
+type CreateUserPayload {
+  clientMutationId: String!
+  user: User
+}
+
 interface Node {
   """The ID of the object."""
   id: ID!
@@ -21,6 +31,7 @@ interface Node {
 type RootMutationType {
   """A mutation that inserts a stock into the database"""
   createStock(input: CreateStockInput!): CreateStockPayload
+  createUser(input: CreateUserInput!): CreateUserPayload
 }
 
 type RootQueryType {
@@ -40,5 +51,19 @@ input StockInputObject {
   name: String!
   price: Float
   ticker: String!
+}
+
+type User implements Node {
+  email: String
+
+  """The ID of an object"""
+  id: ID!
+  name: String
+}
+
+input UserInputObject {
+  email: String!
+  name: String!
+  password: String!
 }
 
