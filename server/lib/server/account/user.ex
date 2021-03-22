@@ -21,9 +21,7 @@ defmodule Server.Account.User do
   end
 
   def store_token_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:token])
-    |> validate_required([:token])
+    user |> cast(attrs, [:token])
   end
 
   defp put_password_hash(changeset) do

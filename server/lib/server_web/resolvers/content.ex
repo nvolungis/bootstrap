@@ -4,11 +4,12 @@ defmodule ServerWeb.Resolvers.Content do
 
   import Ecto.Query, only: [from: 2]
 
-  def list_stocks(_, _) do
+  def list_stocks(_, %{context: ctx}) do
+    IO.inspect(ctx, label: "ctx")
     {:ok, Server.Portfolio.Stock |> Server.Repo.all()}
   end
 
-  def get_stock(%{stock_id: global_id}, _) do
+  def get_stock(%{stock_id: global_id}, _ctx) do
     Absinthe.Relay.Node.from_global_id(global_id, ServerWeb.Schema)
   end
 
@@ -30,5 +31,10 @@ defmodule ServerWeb.Resolvers.Content do
          {:ok, _ } <- Server.Account.store_token(user, jwt) do
       {:ok, %{token: jwt}}
     end
+  end
+
+  def logout(_args,  %{context: %{current_user: current_user}}) do
+    Server.Account.logout(current_user)
+    {:ok, %{user: current_user}}
   end
 end

@@ -1,3 +1,5 @@
+import ServerWeb.IsAuthenticated
+
 defmodule ServerWeb.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema, :classic
@@ -26,6 +28,8 @@ defmodule ServerWeb.Schema do
       output do
         field :stock, :stock
       end
+
+      is_authenticated()
       resolve &Resolvers.Content.create_stock/2
     end
 
@@ -48,11 +52,21 @@ defmodule ServerWeb.Schema do
       end
       resolve &Resolvers.Content.login/2
     end
+
+    payload field :logout do
+      output do
+        field :user, :user
+      end
+
+      is_authenticated()
+      resolve &Resolvers.Content.logout/2
+    end
   end
 
   query do
     @desc "Get all stocks"
     field :stocks, list_of(:stock) do
+      is_authenticated()
       resolve &ServerWeb.Resolvers.Content.list_stocks/2
     end
   end

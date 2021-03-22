@@ -37,4 +37,8 @@ defmodule Server.Account do
         {:error, :"User not found"}
     end
   end
+
+  def logout(user) do
+    store_token(user, nil)
+  end
 end
