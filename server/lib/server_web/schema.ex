@@ -2,7 +2,7 @@ import ServerWeb.IsAuthenticated
 
 defmodule ServerWeb.Schema do
   use Absinthe.Schema
-  use Absinthe.Relay.Schema, :classic
+  use Absinthe.Relay.Schema, :modern
   import_types ServerWeb.Schema.ContentTypes
 
   alias ServerWeb.Resolvers
@@ -48,9 +48,28 @@ defmodule ServerWeb.Schema do
         field :login, :login_input_object
       end
       output do
-        field :token, :string
+        field :token_header, :string
+        field :token_payload, :string
+        field :token_combined, :string
       end
       resolve &Resolvers.Content.login/2
+      middleware fn (%{value: value, context: context} = resolution, _) ->
+        case value do
+          %{token: token} ->
+            # strip out the signature and set it to context so it can be set as an httpOnly header
+            # the rest of the token can be sent back to the client
+            [header, payload, signature] = String.split(token, ".")
+            context = Map.put(context, :token_signature, signature)
+            resolution
+              |> Map.put(:context, context)
+              |> Map.put(:value, %{
+                token_header: header,
+                token_payload: payload,
+                token_combined: header <> "." <> payload
+              })
+          _ -> resolution
+        end
+      end
     end
 
     payload field :logout do

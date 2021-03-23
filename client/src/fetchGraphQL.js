@@ -4,11 +4,13 @@ async function fetchGraphQL(text, variables) {
     headers: {
       'Content-Type': 'application/json',
       'Access-Control-Request-Headers': 'Content-Type',
+      'Authorization': `Bearer ${localStorage['token']}`,
     },
     body: JSON.stringify({
       query: text,
       variables,
     }),
+    credentials: "include",
   });
 
   // Get the response as JSON

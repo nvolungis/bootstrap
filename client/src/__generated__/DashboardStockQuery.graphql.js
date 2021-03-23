@@ -8,8 +8,8 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type AppStockQueryVariables = {||};
-export type AppStockQueryResponse = {|
+export type DashboardStockQueryVariables = {||};
+export type DashboardStockQueryResponse = {|
   +stocks: ?$ReadOnlyArray<?{|
     +id: string,
     +name: ?string,
@@ -17,15 +17,15 @@ export type AppStockQueryResponse = {|
     +price: ?number,
   |}>
 |};
-export type AppStockQuery = {|
-  variables: AppStockQueryVariables,
-  response: AppStockQueryResponse,
+export type DashboardStockQuery = {|
+  variables: DashboardStockQueryVariables,
+  response: DashboardStockQueryResponse,
 |};
 */
 
 
 /*
-query AppStockQuery {
+query DashboardStockQuery {
   stocks {
     id
     name
@@ -82,7 +82,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "AppStockQuery",
+    "name": "DashboardStockQuery",
     "selections": (v0/*: any*/),
     "type": "RootQueryType",
     "abstractKey": null
@@ -91,20 +91,20 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "AppStockQuery",
+    "name": "DashboardStockQuery",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "272a3c9942b266fb3248265f345c16a8",
+    "cacheID": "eed35bd686dcd73cd11f49d3cd9874b8",
     "id": null,
     "metadata": {},
-    "name": "AppStockQuery",
+    "name": "DashboardStockQuery",
     "operationKind": "query",
-    "text": "query AppStockQuery {\n  stocks {\n    id\n    name\n    ticker\n    price\n  }\n}\n"
+    "text": "query DashboardStockQuery {\n  stocks {\n    id\n    name\n    ticker\n    price\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'f1154c90cb35ba1490283a8b141f902c';
+(node/*: any*/).hash = 'd21d779bde8bb5f82f77a73685fc624d';
 
 module.exports = node;

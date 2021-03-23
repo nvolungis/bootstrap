@@ -52,7 +52,10 @@ defmodule ServerWeb.Endpoint do
   plug CORSPlug,
     origin: ["http://localhost:3000"],
     headers: [
-      "Content-Type"
+      "Content-Type",
+      "Bearer",
+      "Authorization",
+      "Access-Control-Allow-Credentials"
     ]
 
   plug Plug.Session, @session_options

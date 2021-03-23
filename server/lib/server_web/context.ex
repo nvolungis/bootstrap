@@ -19,13 +19,18 @@ defmodule ServerWeb.Context do
   end
 
   defp build_context(conn) do
-    with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
-         {:ok, current_user} <- authorize(token) do
+    IO.inspect("authoriasldkjf")
+    IO.inspect conn
+    IO.inspect conn.req_cookies["token_signature"]
+    with ["Bearer " <> token] <- get_req_header(conn, "authorization") |> IO.inspect(label: "auth"),
+         signature <- conn.req_cookies["token_signature"] |> IO.inspect(label: "TOOOOOK"),
+         {:ok, current_user} <- authorize(token <> "." <> signature) do
            {:ok, %{current_user: current_user, token: token}}
     end
   end
 
   defp authorize(token) do
+    IO.inspect(token, label: "authorizing")
     User
     |> where(token: ^token)
     |> Repo.one()
@@ -33,5 +38,6 @@ defmodule ServerWeb.Context do
       nil -> {:error, "Invalid authorization token"}
       user -> {:ok, user}
     end
+    |> IO.inspect(label: "toketoke")
   end
 end

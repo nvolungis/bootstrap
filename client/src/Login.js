@@ -1,5 +1,18 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import graphql from 'babel-plugin-relay/macro';
+// import { loadQuery, usePreloadedQuery } from 'react-relay/hooks';
+import { useMutation } from 'react-relay';
+import { useGlobalContext } from './GlobalContext';
+
+const loginMutation = graphql`
+  mutation LoginloginMutation ($input: LoginInput!) {
+    login(input: $input) {
+      tokenHeader
+      tokenPayload
+      tokenCombined
+    }
+  }`;
 
 const LoginContainer = styled.div`
   padding: 10px;
@@ -24,6 +37,19 @@ const Input = styled.input`
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [commit, _isInFlight] = useMutation(loginMutation);
+  const { setToken } = useGlobalContext();
+
+  const onSubmit = () => {
+    commit({
+      variables: { input: { login: { email, password } } },
+      onCompleted(data) {
+        // const payload = atob(data.login.tokenPayload)
+        setToken(data.login.tokenCombined);
+      },
+      onError(error){ console.log('error', error) },
+    });
+  };
 
   return (
     <LoginContainer>
@@ -48,6 +74,10 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
+      </FormElem>
+
+      <FormElem>
+        <button onClick={onSubmit}>Submit</button>
       </FormElem>
     </LoginContainer>
   );

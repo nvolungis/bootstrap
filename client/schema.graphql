@@ -4,22 +4,37 @@ schema {
 }
 
 input CreateStockInput {
-  clientMutationId: String!
   stock: StockInputObject
 }
 
 type CreateStockPayload {
-  clientMutationId: String!
   stock: Stock
 }
 
 input CreateUserInput {
-  clientMutationId: String!
   user: UserInputObject
 }
 
 type CreateUserPayload {
-  clientMutationId: String!
+  user: User
+}
+
+input LoginInput {
+  login: LoginInputObject
+}
+
+input LoginInputObject {
+  email: String!
+  password: String!
+}
+
+type LoginPayload {
+  tokenCombined: String
+  tokenHeader: String
+  tokenPayload: String
+}
+
+type LogoutPayload {
   user: User
 }
 
@@ -32,6 +47,8 @@ type RootMutationType {
   """A mutation that inserts a stock into the database"""
   createStock(input: CreateStockInput!): CreateStockPayload
   createUser(input: CreateUserInput!): CreateUserPayload
+  login(input: LoginInput!): LoginPayload
+  logout: LogoutPayload
 }
 
 type RootQueryType {
