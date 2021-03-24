@@ -1,19 +1,28 @@
+import { Router } from "@reach/router"
 import Login from './Login';
+import SignUp from './SignUp';
 import Dashboard from './Dashboard';
+import LogoutButton from './LogoutButton';
+import ProtectedRoute from './ProtectedRoute';
 import { useGlobalContext } from './GlobalContext';
 
-const Router = () => {
+const Routes = () => {
   const { token } = useGlobalContext();
 
   return (
     <div>
-      { token ? (
-        <Dashboard />
-      ) : (
-        <Login />
-      )}
+      <header>
+        <nav>
+          {token && <LogoutButton />}
+        </nav>
+      </header>
+      <Router>
+        <Login path="/login" />
+        <SignUp path="/signup" />
+        <ProtectedRoute as={Dashboard} path="/" />
+      </Router>
     </div>
   );
 };
 
-export default Router;
+export default Routes;

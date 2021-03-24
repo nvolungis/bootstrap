@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro';
-import { loadQuery } from 'react-relay/hooks';
-import { usePreloadedQuery, useLazyLoadQuery } from 'react-relay/hooks';
-import RelayEnvironment from './RelayEnvironment';
+import { useLazyLoadQuery } from 'react-relay/hooks';
 
 const StocksQuery = graphql`
   query DashboardStockQuery {

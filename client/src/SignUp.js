@@ -2,19 +2,18 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import graphql from 'babel-plugin-relay/macro';
 import { useMutation } from 'react-relay';
-import { navigate, Redirect } from '@reach/router';
-import { useGlobalContext } from './GlobalContext';
 
-const loginMutation = graphql`
-  mutation LoginloginMutation ($input: LoginInput!) {
-    login(input: $input) {
-      tokenHeader
-      tokenPayload
-      tokenCombined
+const createUserMutation = graphql`
+  mutation SignUpUserMutation ($input: CreateUserInput!) {
+    createUser(input: $input) {
+      user {
+        name
+        email
+      }
     }
   }`;
 
-const LoginContainer = styled.div`
+const Container = styled.div`
   padding: 10px;
 `;
 
@@ -34,30 +33,36 @@ const Input = styled.input`
   font-size: 18px;
 `;
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [commit] = useMutation(loginMutation);
-  const { token, setToken } = useGlobalContext();
-
-  if (token) {
-    return <Redirect to="/" noThrow={true}/>
-  }
+  const [name, setName] = useState('');
+  const [commit] = useMutation(createUserMutation);
 
   const onSubmit = () => {
     commit({
-      variables: { input: { login: { email, password } } },
+      variables: { input: { user: { name, email, password } } },
       onCompleted(data) {
-        // const payload = atob(data.login.tokenPayload)
-        setToken(data.login.tokenCombined);
+        console.log('data', data);
       },
       onError(error){ console.log('error', error) },
     });
   };
 
   return (
-    <LoginContainer>
-      <h1>Login</h1>
+    <Container>
+      <h1>Sign Up</h1>
+      <FormElem>
+        <label>
+          <Label>Name</Label>
+          <Input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+      </FormElem>
+
       <FormElem>
         <label>
           <Label>Email</Label>
@@ -83,8 +88,8 @@ const Login = () => {
       <FormElem>
         <button onClick={onSubmit}>Submit</button>
       </FormElem>
-    </LoginContainer>
+    </Container>
   );
 };
 
-export default Login;
+export default SignUp;
