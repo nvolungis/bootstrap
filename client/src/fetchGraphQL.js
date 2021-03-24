@@ -1,4 +1,6 @@
-async function fetchGraphQL(text, variables) {
+const noop = () => {}
+
+async function fetchGraphQL({ text, variables, onError = noop, onAuthError = noop }) {
   const response = await fetch('http://localhost:4000', {
     method: 'POST',
     headers: {
@@ -14,7 +16,17 @@ async function fetchGraphQL(text, variables) {
   });
 
   // Get the response as JSON
-  return await response.json();
+  const data = await response.json();
+
+  if (data.errors) {
+    if (data.errors[0].message === 'Not logged in') {
+      onAuthError();
+    } else {
+      onError(data.errors);
+    }
+  }
+
+  return data;
 }
 
 export default fetchGraphQL;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import graphql from 'babel-plugin-relay/macro';
 import { useMutation } from 'react-relay';
-import { navigate, Redirect } from '@reach/router';
+import { Redirect } from '@reach/router';
 import { useGlobalContext } from './GlobalContext';
 
 const loginMutation = graphql`

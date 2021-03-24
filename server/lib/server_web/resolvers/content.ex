@@ -5,7 +5,6 @@ defmodule ServerWeb.Resolvers.Content do
   import Ecto.Query, only: [from: 2]
 
   def list_stocks(_, %{context: ctx}) do
-    IO.inspect(ctx, label: "ctx")
     {:ok, Server.Portfolio.Stock |> Server.Repo.all()}
   end
 
@@ -26,15 +25,16 @@ defmodule ServerWeb.Resolvers.Content do
   end
 
   def login(%{login: %{email: email, password: password}}, _info) do
-    with {:ok, user} <- Account.login(email, password) |> IO.inspect(label: "user"),
-         {:ok, jwt, _} <- Server.Guardian.encode_and_sign(user) |> IO.inspect(label: "encodenadsigne"),
-         {:ok, _ } <- Server.Account.store_token(user, jwt) do
+    with {:ok, user} <- Account.login(email, password),
+         {:ok, jwt, _} <- Server.Guardian.encode_and_sign(user, %{}, ttl: {1, :minute}) do
       {:ok, %{token: jwt}}
     end
   end
 
-  def logout(_args,  %{context: %{current_user: current_user}}) do
-    Server.Account.logout(current_user)
-    {:ok, %{user: current_user}}
+  def logout(_args,  %{context: %{current_user: current_user, token: token}}) do
+    case Server.Guardian.revoke(token) do
+      {:ok, _claims} -> {:ok, %{user: current_user}}
+      {:error, error} -> {:error, error}
+    end
   end
 end
