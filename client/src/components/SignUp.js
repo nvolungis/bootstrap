@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import graphql from 'babel-plugin-relay/macro';
-import { useMutation } from 'react-relay';
+import { useMutation } from 'urql';
 
-const createUserMutation = graphql`
+const createUserMutation = `
   mutation SignUpUserMutation ($input: CreateUserInput!) {
     createUser(input: $input) {
       user {
@@ -37,15 +36,12 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [commit] = useMutation(createUserMutation);
+  const [, createUser] = useMutation(createUserMutation);
 
   const onSubmit = () => {
-    commit({
-      variables: { input: { user: { name, email, password } } },
-      onCompleted(data) {
-        console.log('data', data);
-      },
-      onError(error){ console.log('error', error) },
+    const variables = { input: { user: { name, email, password } } };
+    createUser(variables).then(({data}) => {
+      console.log('user created', data);
     });
   };
 

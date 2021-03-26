@@ -13,7 +13,6 @@ const StocksQuery = `
 
 const Dashboard = () => {
   const [{ data, fetching, error }] = useQuery({ query: StocksQuery });
-  console.log(data, fetching, error)
 
   if (fetching) return <div>loading</div>;
   if (error) return <div>{error.message}</div>;
