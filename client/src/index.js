@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createClient, Provider } from 'urql';
+import GlobalProvider from './GlobalContext';
+import Spinner from './Spinner';
+import Router from './Router';
+
+const client = createClient({
+  url: 'http://localhost:4000/graphql',
+  fetchOptions: () => {
+    const token = localStorage['token'];
+    return {
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Access-Control-Request-Headers': 'Content-Type',
+        'Content-Type': 'application/json',
+      },
+      credentials: "include",
+    };
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GlobalProvider>
+      <Provider value={client}>
+        <Suspense fallback={<Spinner />}>
+          <Router />
+        </Suspense>
+      </Provider>
+    </GlobalProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

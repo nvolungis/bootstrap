@@ -16,14 +16,14 @@
     "react-scripts": "4.0.3",
     "relay-runtime": "^11.0.0",
     "styled-components": "^5.2.1",
+    "urql": "^2.0.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "yarn run relay-dev && react-scripts start",
-    "build": "yarn run relay-dev && react-scripts build",
-    "test": "yarn run relay-dev && react-scripts test",
-    "schema": "./node_modules/get-graphql-schema/dist/index.js http://localhost:4000> schema.graphql",
-    "relay-dev": "yarn run relay-compiler --schema schema.graphql --src ./ --watch"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "schema": "./node_modules/get-graphql-schema/dist/index.js http://localhost:4000> schema.graphql"
   },
   "eslintConfig": {
     "extends": [

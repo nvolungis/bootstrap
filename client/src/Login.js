@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import graphql from 'babel-plugin-relay/macro';
-import { useMutation } from 'react-relay';
+import { useMutation } from 'urql';
 import { Redirect } from '@reach/router';
 import { useGlobalContext } from './GlobalContext';
 
-const loginMutation = graphql`
-  mutation LoginloginMutation ($input: LoginInput!) {
+const LoginMutation = `
+  mutation loginMutation($input: LoginInput!) {
     login(input: $input) {
       tokenHeader
       tokenPayload
@@ -37,21 +36,19 @@ const Input = styled.input`
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [commit] = useMutation(loginMutation);
-  const { token, setToken } = useGlobalContext();
+  const [loginResult, login] = useMutation(LoginMutation);
+  // const { token, setToken } = useGlobalContext();
 
-  if (token) {
-    return <Redirect to="/" noThrow={true}/>
-  }
+  // if (token) {
+  //   return <Redirect to="/" noThrow={true}/>
+  // }
 
   const onSubmit = () => {
-    commit({
-      variables: { input: { login: { email, password } } },
-      onCompleted(data) {
-        // const payload = atob(data.login.tokenPayload)
-        setToken(data.login.tokenCombined);
-      },
-      onError(error){ console.log('error', error) },
+    const variables = { input: { login: { email, password } } };
+    console.log(variables);
+    login(variables).then(result => {
+      console.log(result);
+      // setToken(data.login.tokenCombined);
     });
   };
 
