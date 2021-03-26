@@ -23,7 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "schema": "./node_modules/get-graphql-schema/dist/index.js http://localhost:4000> schema.graphql"
+    "schema": "./node_modules/get-graphql-schema/dist/index.js http://localhost:4000> src/schema.json --json"
   },
   "eslintConfig": {
     "extends": [

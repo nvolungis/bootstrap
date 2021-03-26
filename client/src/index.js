@@ -2,10 +2,11 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { createClient, Provider } from 'urql';
+import { createClient, Provider, cacheExchange } from 'urql';
 import GlobalProvider from './GlobalContext';
 import Spinner from './Spinner';
 import Router from './Router';
+// import schema from './schema.json';
 
 const client = createClient({
   url: 'http://localhost:4000/graphql',
@@ -20,6 +21,7 @@ const client = createClient({
       credentials: "include",
     };
   },
+  maskTypename: true,
 });
 
 ReactDOM.render(

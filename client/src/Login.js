@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useMutation } from 'urql';
+import { useMutation, gql } from 'urql';
 import { Redirect } from '@reach/router';
 import { useGlobalContext } from './GlobalContext';
 
-const LoginMutation = `
+const LoginMutation = gql`
   mutation loginMutation($input: LoginInput!) {
     login(input: $input) {
       tokenHeader
