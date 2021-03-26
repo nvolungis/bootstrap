@@ -53,6 +53,7 @@ const getClient = (onAuthError) => {
       fetchExchange,
     ],
     maskTypename: true,
+    suspense: true,
   });
 }
 

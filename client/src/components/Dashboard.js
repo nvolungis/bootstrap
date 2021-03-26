@@ -12,16 +12,13 @@ const StocksQuery = `
 `;
 
 const Dashboard = () => {
-  const [{ data, fetching, error }] = useQuery({ query: StocksQuery });
-
-  if (fetching) return <div>loading</div>;
-  if (error) return <div>{error.message}</div>;
+  const [{ data }] = useQuery({ query: StocksQuery });
 
   return (
     <div>
       <h1>Dashboard</h1>
       <ul>
-        {data && data.stocks.map(stock => (
+        {data.stocks.map(stock => (
           <li key={stock.id}>
             <div>name: {stock.name}</div>
             <div>ticker: {stock.ticker}</div>

@@ -6,7 +6,11 @@ const Provider = ({ children }) => {
   const [token, setToken] = useState(localStorage['token']);
 
   const setTokenAndPersist = (value) => {
-    localStorage['token'] = value;
+    if (value === undefined || value === null) {
+      delete localStorage['token'];
+    } else {
+      localStorage['token'] = value;
+    }
     setToken(value);
   };
 

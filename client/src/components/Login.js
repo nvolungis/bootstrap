@@ -53,31 +53,33 @@ const Login = () => {
   return (
     <LoginContainer>
       <h1>Login</h1>
-      <FormElem>
-        <label>
-          <Label>Email</Label>
-          <Input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-      </FormElem>
+      <form onSubmit={onSubmit}>
+        <FormElem>
+          <label>
+            <Label>Email</Label>
+            <Input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
+        </FormElem>
 
-      <FormElem>
-        <label>
-          <Label>Password</Label>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-      </FormElem>
+        <FormElem>
+          <label>
+            <Label>Password</Label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+        </FormElem>
 
-      <FormElem>
-        <button onClick={onSubmit}>Submit</button>
-      </FormElem>
+        <FormElem>
+          <button type="submit">Submit</button>
+        </FormElem>
+      </form>
     </LoginContainer>
   );
 };
