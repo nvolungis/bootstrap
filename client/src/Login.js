@@ -36,19 +36,17 @@ const Input = styled.input`
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginResult, login] = useMutation(LoginMutation);
-  // const { token, setToken } = useGlobalContext();
+  const [, login] = useMutation(LoginMutation);
+  const { token, setToken } = useGlobalContext();
 
-  // if (token) {
-  //   return <Redirect to="/" noThrow={true}/>
-  // }
+  if (token) {
+    return <Redirect to="/" noThrow={true}/>
+  }
 
   const onSubmit = () => {
     const variables = { input: { login: { email, password } } };
-    console.log(variables);
-    login(variables).then(result => {
-      console.log(result);
-      // setToken(data.login.tokenCombined);
+    login(variables).then(({data}) => {
+      setToken(data.login.tokenCombined);
     });
   };
 

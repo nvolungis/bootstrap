@@ -7,6 +7,7 @@ const Provider = ({ children }) => {
 
   const setTokenAndPersist = (value) => {
     localStorage['token'] = value;
+    console.log('setting localstorage', localStorage)
     setToken(value);
   };
 

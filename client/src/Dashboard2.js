@@ -1,7 +1,7 @@
 import { useQuery } from 'urql';
 
 const StocksQuery = `
-  query DashboardStockQuery {
+  query Dashboard2StockQuery {
     stocks {
       id
       name
@@ -13,14 +13,13 @@ const StocksQuery = `
 
 const Dashboard = () => {
   const [{ data, fetching, error }] = useQuery({ query: StocksQuery });
-  console.log(data, fetching, error)
 
   if (fetching) return <div>loading</div>;
   if (error) return <div>{error.message}</div>;
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>Dashboard2</h1>
       <ul>
         {data && data.stocks.map(stock => (
           <li key={stock.id}>

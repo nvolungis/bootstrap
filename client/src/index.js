@@ -1,39 +1,46 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { createClient, Provider, cacheExchange } from 'urql';
-import GlobalProvider from './GlobalContext';
+import { Provider } from 'urql';
+import GlobalProvider, { useGlobalContext } from './GlobalContext';
 import Spinner from './Spinner';
 import Router from './Router';
-// import schema from './schema.json';
+import createClient from './createClient';
 
-const client = createClient({
-  url: 'http://localhost:4000/graphql',
-  fetchOptions: () => {
-    const token = localStorage['token'];
-    return {
-      headers: {
-        'Authorization': token ? `Bearer ${token}` : '',
-        'Access-Control-Request-Headers': 'Content-Type',
-        'Content-Type': 'application/json',
-      },
-      credentials: "include",
-    };
-  },
-  maskTypename: true,
-});
+const Urql = ({ children, isLoggedIn }) => {
+  const { setToken } = useGlobalContext();
+
+  const client = useMemo(() => {
+    return createClient(() => {
+      console.log('got an auth error, nulling token')
+      setToken('');
+    });
+  }, [setToken]);
+
+  return (
+    <Provider value={client}>
+      {children}
+    </Provider>
+  );
+};
+
+const App = () => {
+  return (
+    <React.StrictMode>
+      <GlobalProvider>
+        <Urql>
+          <Suspense fallback={<Spinner />}>
+            <Router />
+          </Suspense>
+        </Urql>
+      </GlobalProvider>
+    </React.StrictMode>
+  );
+};
 
 ReactDOM.render(
-  <React.StrictMode>
-    <GlobalProvider>
-      <Provider value={client}>
-        <Suspense fallback={<Spinner />}>
-          <Router />
-        </Suspense>
-      </Provider>
-    </GlobalProvider>
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );
 

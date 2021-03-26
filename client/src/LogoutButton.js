@@ -1,8 +1,7 @@
-import { useMutation } from 'react-relay';
-import graphql from 'babel-plugin-relay/macro';
+import { useMutation } from 'urql';
 import { useGlobalContext } from './GlobalContext';
 
-const logoutMutation = graphql`
+const LogoutMutation = `
   mutation LogoutButtonLogoutMutation {
     logout {
       user {
@@ -14,22 +13,14 @@ const logoutMutation = graphql`
 
 const LogoutButton = () => {
   const { setToken } = useGlobalContext();
-  const [commit] = useMutation(logoutMutation);
+   const [, logout] = useMutation(LogoutMutation);
 
   return (
     <button
       onClick={() => {
         console.log('lic')
-        commit({
-          onCompleted: (data) => {
-            console.log('complete')
-            console.log(data);
-            setToken("");
-          },
-          onError: (error) => {
-            console.log('errr')
-            console.error(error);
-          },
+        logout({input: {}}).then(() => {
+          setToken("");
         });
       }}>
         logout
