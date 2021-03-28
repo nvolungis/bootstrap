@@ -41,6 +41,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [, login] = useMutation(LoginMutation);
   const { token, setTokens } = useGlobalContext();
+  const [loginError, setLoginError] = useState();
 
   if (token) {
     return <Redirect to="/" noThrow={true}/>
@@ -49,7 +50,11 @@ const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const variables = { input: { login: { email, password } } };
-    login(variables).then(({data}) => {
+    login(variables).then(({data, error}) => {
+      if (error) {
+        return setLoginError(error.graphQLErrors.map(({message}) => message).join(', '));
+      }
+
       setTokens({ token: data.login.combinedToken, refresh: data.login.combinedRefresh });
     });
   };
@@ -57,6 +62,7 @@ const Login = () => {
   return (
     <LoginContainer>
       <h1>Login</h1>
+      {loginError && <div>{loginError}</div>}
       <form onSubmit={onSubmit}>
         <FormElem>
           <label>
