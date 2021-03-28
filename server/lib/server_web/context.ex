@@ -20,9 +20,18 @@ defmodule ServerWeb.Context do
 
   defp build_context(conn) do
     with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
-         signature <- conn.req_cookies["token_signature"],
-         {:ok, current_user} <- authorize(token <> "." <> signature) do
-           {:ok, %{current_user: current_user, token: token <> "." <> signature}}
+         signature_token <- conn.req_cookies["signature_token"],
+         signature_refresh <- conn.req_cookies["signature_refresh"],
+         {:ok, current_user} <- authorize(token <> "." <> signature_token) do
+           {:ok, %{
+             current_user: current_user,
+             token: token <> "." <> signature_token,
+             refresh_signature: signature_refresh
+           }}
+    else
+      _ ->
+        signature_refresh = conn.req_cookies["signature_refresh"]
+        {:ok, %{ refresh_signature: signature_refresh }}
     end
   end
 

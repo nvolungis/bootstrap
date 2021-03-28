@@ -22,14 +22,14 @@ const LogoutMutation = `
 `;
 
 const LogoutButton = () => {
-  const { setToken } = useGlobalContext();
+  const { setTokens } = useGlobalContext();
    const [, logout] = useMutation(LogoutMutation);
 
   return (
     <Button
       onClick={() => {
         logout({input: {}}).then(() => {
-          setToken("");
+          setTokens({});
         });
       }}>
         Logout

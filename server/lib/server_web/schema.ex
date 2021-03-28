@@ -43,33 +43,36 @@ defmodule ServerWeb.Schema do
       resolve &Resolvers.Content.create_user/2
     end
 
+    payload field :refresh do
+      input do
+        field :refresh, :refresh_input_object
+      end
+      output do
+        field :header_token, :string
+        field :payload_token, :string
+        field :combined_token, :string
+        field :header_refresh, :string
+        field :payload_refresh, :string
+        field :combined_refresh, :string
+      end
+      resolve &Resolvers.Content.refresh/2
+      middleware fn(resolution, other) -> middlewares(resolution, other) end
+    end
+
     payload field :login do
       input do
         field :login, :login_input_object
       end
       output do
-        field :token_header, :string
-        field :token_payload, :string
-        field :token_combined, :string
+        field :header_token, :string
+        field :payload_token, :string
+        field :combined_token, :string
+        field :header_refresh, :string
+        field :payload_refresh, :string
+        field :combined_refresh, :string
       end
       resolve &Resolvers.Content.login/2
-      middleware fn (%{value: value, context: context} = resolution, _) ->
-        case value do
-          %{token: token} ->
-            # strip out the signature and set it to context so it can be set as an httpOnly header
-            # the rest of the token can be sent back to the client
-            [header, payload, signature] = String.split(token, ".")
-            context = Map.put(context, :token_signature, signature)
-            resolution
-              |> Map.put(:context, context)
-              |> Map.put(:value, %{
-                token_header: header,
-                token_payload: payload,
-                token_combined: header <> "." <> payload
-              })
-          _ -> resolution
-        end
-      end
+      middleware fn(resolution, other) -> middlewares(resolution, other) end
     end
 
     payload field :logout do
@@ -88,5 +91,46 @@ defmodule ServerWeb.Schema do
       is_authenticated()
       resolve &ServerWeb.Resolvers.Content.list_stocks/2
     end
+  end
+
+  defp middlewares(resolution, _) do
+    resolution
+      |> add_token(:token)
+      |> add_token(:refresh)
+      |> remove_from_value([:token, :refresh])
+  end
+
+  defp add_token(%{value: nil, context: context} = resolution, key) do
+    resolution
+  end
+
+  defp add_token(%{value: resolved_value, context: context} = resolution, key) do
+    case Map.get(resolved_value, key) do
+      nil -> resolution
+      value ->
+        suffix = Atom.to_string(key)
+        [header, payload, signature] = String.split(value, ".")
+        context = Map.put(context, String.to_atom("signature_" <> suffix), signature)
+        value_map = resolved_value
+          |> Map.put(String.to_atom("header_" <> suffix), header)
+          |> Map.put(String.to_atom("payload_" <> suffix), payload)
+          |> Map.put(String.to_atom("combined_" <> suffix), header <> "." <> payload)
+
+        resolution
+          |> Map.put(:context, context)
+          |> Map.put(:value, value_map)
+    end
+  end
+
+  defp remove_from_value(%{value: nil, context: context} = resolution, keys) do
+    resolution
+  end
+
+  defp remove_from_value(%{value: resolved_value, context: context} = resolution, keys) do
+    value_map = List.foldl(keys, resolved_value, fn (key, acc) ->
+      Map.delete(acc, key)
+    end)
+
+    Map.put(resolution, :value, value_map)
   end
 end

@@ -7,9 +7,12 @@ import { useGlobalContext } from './GlobalContext';
 const LoginMutation = gql`
   mutation loginMutation($input: LoginInput!) {
     login(input: $input) {
-      tokenHeader
-      tokenPayload
-      tokenCombined
+      headerToken
+      payloadToken
+      combinedToken
+      headerRefresh
+      payloadRefresh
+      combinedRefresh
     }
   }`;
 
@@ -37,16 +40,17 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [, login] = useMutation(LoginMutation);
-  const { token, setToken } = useGlobalContext();
+  const { token, setTokens } = useGlobalContext();
 
   if (token) {
     return <Redirect to="/" noThrow={true}/>
   }
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     const variables = { input: { login: { email, password } } };
     login(variables).then(({data}) => {
-      setToken(data.login.tokenCombined);
+      setTokens({ token: data.login.combinedToken, refresh: data.login.combinedRefresh });
     });
   };
 

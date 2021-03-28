@@ -26,8 +26,9 @@ defmodule ServerWeb.Resolvers.Content do
 
   def login(%{login: %{email: email, password: password}}, _info) do
     with {:ok, user} <- Account.login(email, password),
-         {:ok, jwt, _} <- Server.Guardian.encode_and_sign(user, %{}, ttl: {1, :minute}) do
-      {:ok, %{token: jwt}}
+         {:ok, jwt, _} <- create_token(user),
+         {:ok, refresh_jwt, _} <- create_refresh(user) do
+      {:ok, %{token: jwt, refresh: refresh_jwt}}
     end
   end
 
@@ -36,5 +37,21 @@ defmodule ServerWeb.Resolvers.Content do
       {:ok, _claims} -> {:ok, %{user: current_user}}
       {:error, error} -> {:error, error}
     end
+  end
+
+  def refresh(%{refresh: %{refresh: refresh_beginning}}, %{context: %{refresh_signature: signature}}) do
+    refresh_token = refresh_beginning <> "." <> signature
+    case Server.Guardian.exchange(refresh_token, "refresh", "access", ttl: {20, :seconds}) do
+      {:ok, {refresh, _claims}, {token, _}} -> {:ok, %{refresh: refresh, token: token}}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  defp create_token(user) do
+    Server.Guardian.encode_and_sign(user, %{}, ttl: {20, :seconds})
+  end
+
+  defp create_refresh(user) do
+    Server.Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {1, :week})
   end
 end

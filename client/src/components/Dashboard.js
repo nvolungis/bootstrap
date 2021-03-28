@@ -18,7 +18,7 @@ const Dashboard = () => {
     <div>
       <h1>Dashboard</h1>
       <ul>
-        {data.stocks.map(stock => (
+        { data && data.stocks.map(stock => (
           <li key={stock.id}>
             <div>name: {stock.name}</div>
             <div>ticker: {stock.ticker}</div>

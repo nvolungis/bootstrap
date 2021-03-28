@@ -26,7 +26,7 @@ const Header = () => {
   return (
     <header>
       <nav>
-        {token && (
+        {token ? (
           <NavList>
             <NavItem>
               <LogoutButton />
@@ -36,6 +36,15 @@ const Header = () => {
             </NavItem>
             <NavItem>
               <Link to="/dashboard">Dash2</Link>
+            </NavItem>
+          </NavList>
+        ): (
+          <NavList>
+            <NavItem>
+              <Link to="/login">Login</Link>
+            </NavItem>
+            <NavItem>
+              <Link to="/signup">Sign Up</Link>
             </NavItem>
           </NavList>
         )}

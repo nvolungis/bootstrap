@@ -11,14 +11,14 @@ const StocksQuery = `
   }
 `;
 
-const Dashboard = () => {
+const Dashboard2 = () => {
   const [{ data }] = useQuery({ query: StocksQuery });
 
   return (
     <div>
       <h1>Dashboard2</h1>
       <ul>
-        {data.stocks.map(stock => (
+        {data && data.stocks.map(stock => (
           <li key={stock.id}>
             <div>name: {stock.name}</div>
             <div>ticker: {stock.ticker}</div>
@@ -30,4 +30,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Dashboard2;

@@ -20,16 +20,20 @@ defmodule ServerWeb.Router do
 
   # take token from context and set it as a header
   def before_send(conn, %Absinthe.Blueprint{} = blueprint) do
-    case blueprint.execution.context[:token_signature] do
-      nil -> conn
-      signature ->
-        IO.inspect(signature, label: "setting sig")
-        put_resp_cookie(conn, "token_signature", signature)
-        |> put_resp_cookie("token_signature2", signature)
-    end
+    conn
+     |> set_context_item_as_cookie(blueprint, :signature_token)
+     |> set_context_item_as_cookie(blueprint, :signature_refresh)
   end
 
   def before_send(conn, _) do
     conn
+  end
+
+  defp set_context_item_as_cookie(conn, blueprint, key) do
+    case blueprint.execution.context[key] do
+      nil -> conn
+      value ->
+        put_resp_cookie(conn, Atom.to_string(key), value)
+    end
   end
 end

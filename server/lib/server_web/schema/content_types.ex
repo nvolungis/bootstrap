@@ -29,4 +29,8 @@ defmodule ServerWeb.Schema.ContentTypes do
     field :email, non_null(:string)
     field :password, non_null(:string)
   end
+
+  input_object :refresh_input_object do
+    field :refresh, non_null(:string)
+  end
 end

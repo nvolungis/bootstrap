@@ -3,19 +3,33 @@ import { createContext, useContext, useState } from 'react';
 const GlobalContext = createContext({});
 
 const Provider = ({ children }) => {
-  const [token, setToken] = useState(localStorage['token']);
+  const [{token, refresh}, setTokens] = useState({
+    token: localStorage['token'],
+    refresh: localStorage['refresh'],
+  });
 
-  const setTokenAndPersist = (value) => {
-    if (value === undefined || value === null) {
+  const setTokensAndPersist = ({ token, refresh }) => {
+    if (token === undefined || token === null) {
       delete localStorage['token'];
     } else {
-      localStorage['token'] = value;
+      localStorage['token'] = token;
     }
-    setToken(value);
-  };
+
+    if (refresh === undefined || refresh === null) {
+      delete localStorage['refresh'];
+    } else {
+      localStorage['refresh'] = refresh;
+    }
+
+    setTokens({ token, refresh });
+  }
 
   return (
-    <GlobalContext.Provider value={{ token, setToken: setTokenAndPersist }}>
+    <GlobalContext.Provider value={{
+      token,
+      refresh,
+      setTokens: setTokensAndPersist,
+    }}>
       {children}
     </GlobalContext.Provider>
   );
