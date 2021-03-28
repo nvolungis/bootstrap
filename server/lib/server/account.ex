@@ -13,12 +13,6 @@ defmodule Server.Account do
     User |> Repo.get!(id)
   end
 
-  def store_token(%User{} = user, token) do
-    user
-    |> User.store_token_changeset(%{token: token})
-    |> Repo.update()
-  end
-
   def create_user(attrs) do
     User.changeset(%User{}, attrs) |> Server.Repo.insert()
   end
@@ -34,11 +28,10 @@ defmodule Server.Account do
         {:error, "Incorrect login credentials"}
 
       true ->
-        {:error, :"User not found"}
+        {:error, "Incorrect login credentials"}
     end
   end
 
   def logout(user) do
-    store_token(user, nil)
   end
 end

@@ -8,6 +8,7 @@ defmodule Server.Account.User do
     field :password_hash, :string
     field :password, :string, virtual: true
     field :token, :string
+    has_one :portfolio_stock, Server.Portfolio.Stock
 
     timestamps()
   end
@@ -27,7 +28,9 @@ defmodule Server.Account.User do
   defp put_password_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
-        put_change(changeset, :password_hash, Comeonin.Bcrypt.hashpwsalt(pass))
+        changeset
+          |> put_change(:password_hash, Comeonin.Bcrypt.hashpwsalt(pass))
+          |> put_change(:password, nil)
       _ ->
         changeset
     end

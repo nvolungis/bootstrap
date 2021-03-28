@@ -6,9 +6,9 @@ use Mix.Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :server, Server.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "server_test#{System.get_env("MIX_TEST_PARTITION")}",
+  username: "root",
+  password: "password",
+  database: "bootstrap_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

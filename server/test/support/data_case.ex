@@ -24,6 +24,7 @@ defmodule Server.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Server.DataCase
+      import Server.Support.Fixtures
     end
   end
 
