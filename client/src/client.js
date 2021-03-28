@@ -53,8 +53,8 @@ const getClient = (onAuthError, onRefresh) => {
       }
     });
 
-    if (data) {
-      console.log('got a refresh token');
+    if (data && data.refresh) {
+      console.log('got a refresh token', data);
       const token = data.refresh.combinedToken;
       const refresh = data.refresh.combinedRefresh;
       onRefresh({ token, refresh });

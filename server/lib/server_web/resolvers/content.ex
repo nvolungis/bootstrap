@@ -41,17 +41,27 @@ defmodule ServerWeb.Resolvers.Content do
 
   def refresh(%{refresh: %{refresh: refresh_beginning}}, %{context: %{refresh_signature: signature}}) do
     refresh_token = refresh_beginning <> "." <> signature
-    case Server.Guardian.exchange(refresh_token, "refresh", "access", ttl: {20, :seconds}) do
-      {:ok, {refresh, _claims}, {token, _}} -> {:ok, %{refresh: refresh, token: token}}
+    case Server.Guardian.exchange(
+      refresh_token,
+      "refresh",
+      "access",
+      ttl: Application.get_env(:server, :token_ttl)
+    ) do
+      {:ok, {refresh, _}, {token, _}} -> {:ok, %{refresh: refresh, token: token}}
       {:error, error} -> {:error, error}
     end
   end
 
   defp create_token(user) do
-    Server.Guardian.encode_and_sign(user, %{}, ttl: {20, :seconds})
+    Server.Guardian.encode_and_sign(user, %{}, ttl: Application.get_env(:server, :token_ttl))
   end
 
   defp create_refresh(user) do
-    Server.Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {1, :week})
+    Server.Guardian.encode_and_sign(
+      user,
+      %{},
+      token_type: "refresh",
+      ttl: Application.get_env(:server, :refresh_ttl)
+    )
   end
 end

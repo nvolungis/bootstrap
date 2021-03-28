@@ -8,7 +8,9 @@
 use Mix.Config
 
 config :server,
-  ecto_repos: [Server.Repo]
+  ecto_repos: [Server.Repo],
+  token_ttl: {10, :seconds},
+  refresh_ttl: {30, :seconds}
 
 # Configures the endpoint
 config :server, ServerWeb.Endpoint,
@@ -28,15 +30,8 @@ config :phoenix, :json_library, Jason
 
 # configures Guardian
 config :server, Server.Guardian,
-  # optional
-  allowed_algos: ["HS512"],
-  # optional
-  verify_module: Guardian.JWT,
   issuer: "server",
-  ttl: {30, :days},
   allowed_drift: 2000,
-  # optional
-  verify_issuer: true,
   # generated using: JOSE.JWK.generate_key({:oct, 16}) |> JOSE.JWK.to_map |> elem(1)
   secret_key: %{"k" => "oVJF7ECCXnCyj1L7sKlRUA", "kty" => "oct"},
   serializer: Server.Guardian
