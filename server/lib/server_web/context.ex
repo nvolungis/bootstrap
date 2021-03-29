@@ -10,6 +10,7 @@ defmodule ServerWeb.Context do
   def init(opts), do: opts
 
   def call(conn, _) do
+    conn = Plug.Conn.fetch_cookies(conn)
     case build_context(conn) do
       {:ok, context} ->
          put_private(conn, :absinthe, %{context: context})
