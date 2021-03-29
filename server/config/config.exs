@@ -16,7 +16,6 @@ config :server,
 config :server, ServerWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "UlzA2+FtX91SLx1rEfOVsl8yDhJcrxrQuJYtEn5yv6GdPVWsGoaBtzsjxPWtIunC",
-  render_errors: [view: ServerWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Server.PubSub,
   live_view: [signing_salt: "nIErVdYh"]
 
