@@ -2,10 +2,6 @@ defmodule ServerWeb.Context do
   @behaviour Plug
 
   import Plug.Conn
-  import Ecto.Query, only: [where: 2]
-
-  alias Server.Repo
-  alias Server.Account.User
 
   def init(opts), do: opts
 

@@ -100,7 +100,7 @@ defmodule ServerWeb.Schema do
       |> remove_from_value([:token, :refresh])
   end
 
-  defp add_token(%{value: nil, context: context} = resolution, key) do
+  defp add_token(%{value: nil} = resolution, _key) do
     resolution
   end
 
@@ -122,11 +122,11 @@ defmodule ServerWeb.Schema do
     end
   end
 
-  defp remove_from_value(%{value: nil, context: context} = resolution, keys) do
+  defp remove_from_value(%{value: nil} = resolution, _keys) do
     resolution
   end
 
-  defp remove_from_value(%{value: resolved_value, context: context} = resolution, keys) do
+  defp remove_from_value(%{value: resolved_value} = resolution, keys) do
     value_map = List.foldl(keys, resolved_value, fn (key, acc) ->
       Map.delete(acc, key)
     end)

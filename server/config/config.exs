@@ -12,6 +12,15 @@ config :server,
   token_ttl: {10, :seconds},
   refresh_ttl: {30, :seconds}
 
+  config :cors_plug,
+    origin: String.split(System.get_env("ALLOWED_CLIENTS", ""), ","),
+    headers: [
+      "Content-Type",
+      "Bearer",
+      "Authorization",
+      "Access-Control-Allow-Credentials"
+    ]
+
 # Configures the endpoint
 config :server, ServerWeb.Endpoint,
   url: [host: "localhost"],

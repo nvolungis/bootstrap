@@ -8,7 +8,7 @@ defmodule Server.Portfolio do
   def list_stocks(%User{} = user) do
     query =
       from s in Stock,
-      where: s.account_user_id == ^user.id,
+      where: s.user_id == ^user.id,
       order_by: [desc: :inserted_at]
 
     Repo.all(query)

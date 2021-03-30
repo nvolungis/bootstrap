@@ -2,13 +2,13 @@ defmodule Server.Account.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "account_users" do
+  schema "users" do
     field :email, :string
     field :name, :string
     field :password_hash, :string
     field :password, :string, virtual: true
     field :token, :string
-    has_one :portfolio_stock, Server.Portfolio.Stock
+    has_one :stock, Server.Portfolio.Stock
 
     timestamps()
   end

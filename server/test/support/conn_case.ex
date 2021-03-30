@@ -23,6 +23,8 @@ defmodule ServerWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import ServerWeb.ConnCase
+      import Server.Support.Fixtures
+      import Server.Support.GraphqlHelpers
 
       alias ServerWeb.Router.Helpers, as: Routes
 

@@ -32,6 +32,6 @@ defmodule Server.Account do
     end
   end
 
-  def logout(user) do
+  def logout(_user) do
   end
 end

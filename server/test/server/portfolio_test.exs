@@ -17,10 +17,10 @@ defmodule Server.PortfolioTest do
       name: "name",
       price: 1.0,
       ticker: "TIK",
-      account_user_id: user.id
+      user_id: user.id
     })
 
     assert stock.name == "name"
-    assert stock.account_user_id == user.id
+    assert stock.user_id == user.id
   end
 end

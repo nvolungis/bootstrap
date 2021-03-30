@@ -70,7 +70,7 @@ const getClient = (onAuthError, onRefresh) => {
   };
 
   return createClient({
-    url: 'http://localhost:4000',
+    url: process.env.REACT_APP_SERVER_HOST,
     fetchOptions: () => ({
       headers: {
         'Access-Control-Request-Headers': 'Content-Type',

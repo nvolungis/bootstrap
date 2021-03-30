@@ -5,7 +5,7 @@ defmodule Server.Support.Fixtures do
   def stock_fixture(%Account.User{} = user, attrs \\ %{}) do
     {:ok, stock} = attrs
       |> Enum.into(%{
-        account_user_id: user.id,
+        user_id: user.id,
         name: "stock",
         price: 1.50,
         ticker: "STK"

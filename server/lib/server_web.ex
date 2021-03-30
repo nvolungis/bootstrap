@@ -17,6 +17,8 @@ defmodule ServerWeb do
   and import those modules here.
   """
 
+  Application.get_env(:server, :allowed_clients) |> IO.inspect(label: "allowed clients")
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: ServerWeb

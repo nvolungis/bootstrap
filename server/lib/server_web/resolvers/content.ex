@@ -11,7 +11,9 @@ defmodule ServerWeb.Resolvers.Content do
   end
 
   def create_stock(%{stock: stock}, _resolution) do
-    {:ok, res} = Stock.changeset(%Stock{}, stock) |> Server.Repo.insert()
+    {:ok, res} = %Stock{}
+      |> Stock.changeset(stock)
+      |> Server.Repo.insert()
     {:ok, %{stock: res}}
   end
 

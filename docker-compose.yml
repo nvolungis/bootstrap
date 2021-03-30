@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: ./server
+    environment:
+      PGUSER: server
+      PGPASSWORD: password
+      PGDATABASE: server_db
+      PGPORT: 5432
+      PGHOST: db
+      ALLOWED_CLIENTS: http://localhost:3000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: ./client
+    environment:
+      env_file: .env
+      REACT_APP_SERVER_HOST: http://localhost:4000
+    ports:
+      - "3000:3000"
+  db:
+    image: postgres:13.2
+    environment:
+      POSTGRES_USER: server
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  dbdata:

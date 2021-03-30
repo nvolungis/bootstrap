@@ -16,16 +16,9 @@ defmodule ServerWeb.Endpoint do
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
+
   plug Plug.MethodOverride
   plug Plug.Head
-  plug CORSPlug,
-    origin: ["http://localhost:3000"],
-    headers: [
-      "Content-Type",
-      "Bearer",
-      "Authorization",
-      "Access-Control-Allow-Credentials"
-    ]
-
+  plug CORSPlug
   plug ServerWeb.Router
 end
