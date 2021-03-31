@@ -7,10 +7,12 @@ import Dashboard2 from './Dashboard2';
 import ProtectedRoute from './ProtectedRoute';
 import Spinner from './Spinner';
 import Header from './Header';
+import Flash from './Flash';
 
 const Routes = () => (
   <div>
     <Header />
+    <Flash />
     <Suspense fallback={<Spinner />}>
       <Router>
         <Login path="/login" />

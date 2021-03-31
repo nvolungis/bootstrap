@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useMutation } from 'urql';
+import { useGlobalContext } from './GlobalContext';
 
 const createUserMutation = `
   mutation SignUpUserMutation ($input: CreateUserInput!) {
@@ -32,16 +33,19 @@ const Input = styled.input`
   font-size: 18px;
 `;
 
-const SignUp = () => {
+const SignUp = ({ navigate }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [, createUser] = useMutation(createUserMutation);
+  const { setFlash } = useGlobalContext();
 
   const onSubmit = () => {
     const variables = { input: { user: { name, email, password } } };
     createUser(variables).then(({data}) => {
       console.log('user created', data);
+      setFlash(`User ${data.createUser.user.email} created`);
+      navigate('/login')
     });
   };
 

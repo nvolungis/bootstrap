@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useMutation, gql } from 'urql';
-import { Redirect } from '@reach/router';
+import { Redirect, Link } from '@reach/router';
 import { useGlobalContext } from './GlobalContext';
 
 const LoginMutation = gql`
@@ -36,12 +36,25 @@ const Input = styled.input`
   font-size: 18px;
 `;
 
+const LoginError = styled.div`
+  padding-bottom: 10px;
+`;
+
+const PasswordReset = () => {
+  return (
+    <LoginError>
+      Trouble logging in? Try <Link to="/reset">Resetting password</Link>
+    </LoginError>
+  );
+};
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [, login] = useMutation(LoginMutation);
   const { token, setTokens } = useGlobalContext();
   const [loginError, setLoginError] = useState();
+  const [invalidAttempts, setInvalidAttempts] = useState(0);
 
   if (token) {
     return <Redirect to="/" noThrow={true}/>
@@ -52,6 +65,7 @@ const Login = () => {
     const variables = { input: { login: { email, password } } };
     login(variables).then(({data, error}) => {
       if (error) {
+        setInvalidAttempts(invalidAttempts + 1);
         return setLoginError(error.graphQLErrors.map(({message}) => message).join(', '));
       }
 
@@ -61,8 +75,9 @@ const Login = () => {
 
   return (
     <LoginContainer>
-      <h1>Login</h1>
-      {loginError && <div>{loginError}</div>}
+      <h1>Login dude</h1>
+      {loginError && <LoginError>{loginError}</LoginError>}
+      {invalidAttempts > 2 && <PasswordReset />}
       <form onSubmit={onSubmit}>
         <FormElem>
           <label>

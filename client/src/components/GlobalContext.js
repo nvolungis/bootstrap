@@ -7,6 +7,7 @@ const Provider = ({ children }) => {
     token: localStorage['token'],
     refresh: localStorage['refresh'],
   });
+  const [flash, setFlash] = useState();
 
   const setTokensAndPersist = ({ token, refresh }) => {
     if (token === undefined || token === null) {
@@ -28,7 +29,9 @@ const Provider = ({ children }) => {
     <GlobalContext.Provider value={{
       token,
       refresh,
+      flash,
       setTokens: setTokensAndPersist,
+      setFlash,
     }}>
       {children}
     </GlobalContext.Provider>

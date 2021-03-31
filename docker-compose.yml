@@ -13,6 +13,11 @@ services:
       ALLOWED_CLIENTS: http://localhost:3000
     ports:
       - "4000:4000"
+    command: ["/root/entrypoint.sh"]
+    volumes:
+      - ./server:/root/:cached
+      - /root/deps/
+      - /root/_build/
     depends_on:
       - db
 
@@ -24,6 +29,10 @@ services:
       REACT_APP_SERVER_HOST: http://localhost:4000
     ports:
       - "3000:3000"
+    volumes:
+      - ./client:/root:cached
+    working_dir: /root/
+    command: ["sh", "-c", "yarn start-docker"]
   db:
     image: postgres:13.2
     environment:

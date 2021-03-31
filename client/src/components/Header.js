@@ -14,7 +14,7 @@ const NavItem = styled.li`
   list-style-type: none;
   & a, button {
     display: inline-block;
-    padding: 8px 16px;
+    padding: 10px;
     color: black;
     text-decoration: underline;
   }
