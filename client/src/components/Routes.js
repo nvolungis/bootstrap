@@ -8,6 +8,8 @@ import ProtectedRoute from './ProtectedRoute';
 import Spinner from './Spinner';
 import Header from './Header';
 import Flash from './Flash';
+import GenerateResetToken from './GenerateResetToken';
+import ResetPassword from './ResetPassword';
 
 const Routes = () => (
   <div>
@@ -17,6 +19,8 @@ const Routes = () => (
       <Router>
         <Login path="/login" />
         <SignUp path="/signup" />
+        <GenerateResetToken path="/generate-reset-token" />
+        <ResetPassword path="/reset-password" />
         <ProtectedRoute as={Dashboard} path="/" />
         <ProtectedRoute as={Dashboard2} path="/dashboard" />
       </Router>
