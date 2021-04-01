@@ -16,7 +16,7 @@ defmodule ServerWeb.Graphql.StocksTest do
     stock = stock_fixture(user)
 
     result = @query
-      |> run(%{current_user: user})
+      |> run([context: %{current_user: user}])
       |> dig(:stocks)
 
     assert result == [Map.take(stock, [:name, :price, :ticker])]

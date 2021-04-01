@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 import { useMutation, gql } from 'urql';
 import { Redirect, Link } from '@reach/router';
 import { useGlobalContext } from './GlobalContext';
+import { Form, FormGroup, FormSubmit } from './Form';
+import elements from '../elements';
 
 const LoginMutation = gql`
   mutation loginMutation($input: LoginInput!) {
@@ -16,35 +17,11 @@ const LoginMutation = gql`
     }
   }`;
 
-const LoginContainer = styled.div`
-  padding: 10px;
-`;
-
-const FormElem = styled.div`
-  margin-bottom: 10px;
-`;
-
-const Label = styled.span`
-  display: block;
-  margin-bottom: 5px;
-`;
-
-const Input = styled.input`
-  padding: 10px;
-  border: 1px solid #505050;
-  outline: none;
-  font-size: 18px;
-`;
-
-const LoginError = styled.div`
-  padding-bottom: 10px;
-`;
-
 const PasswordReset = () => {
   return (
-    <LoginError>
+    <elements.FormError>
       Trouble logging in? Try <Link to="/reset">Resetting password</Link>
-    </LoginError>
+    </elements.FormError>
   );
 };
 
@@ -60,8 +37,7 @@ const Login = () => {
     return <Redirect to="/" noThrow={true}/>
   }
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
     const variables = { input: { login: { email, password } } };
     login(variables).then(({data, error}) => {
       if (error) {
@@ -74,38 +50,13 @@ const Login = () => {
   };
 
   return (
-    <LoginContainer>
-      <h1>Login dude</h1>
-      {loginError && <LoginError>{loginError}</LoginError>}
+    <Form onSubmit={onSubmit} title="Login Dude">
+      {loginError && <elements.FormError>{loginError}</elements.FormError>}
       {invalidAttempts > 2 && <PasswordReset />}
-      <form onSubmit={onSubmit}>
-        <FormElem>
-          <label>
-            <Label>Email</Label>
-            <Input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-        </FormElem>
-
-        <FormElem>
-          <label>
-            <Label>Password</Label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </label>
-        </FormElem>
-
-        <FormElem>
-          <button type="submit">Submit</button>
-        </FormElem>
-      </form>
-    </LoginContainer>
+      <FormGroup value={email} setValue={setEmail} label="Email" />
+      <FormGroup value={password} setValue={setPassword} label="Password" type="password" />
+      <FormSubmit />
+    </Form>
   );
 };
 

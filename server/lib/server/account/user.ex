@@ -7,6 +7,8 @@ defmodule Server.Account.User do
     field :name, :string
     field :password_hash, :string
     field :password, :string, virtual: true
+    field :password_reset_token, :string
+    field :password_reset_sent_at, :naive_datetime
     field :token, :string
     has_one :stock, Server.Portfolio.Stock
 
@@ -16,9 +18,15 @@ defmodule Server.Account.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :email, :password])
+    |> cast(attrs, [:name, :email, :password, :password_reset_token, :password_reset_sent_at])
     |> validate_required([:name, :email, :password])
+    |> validate_confirmation(:password)
     |> put_password_hash()
+  end
+
+  def store_reset_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:password_reset_token, :password_reset_sent_at])
   end
 
   def store_token_changeset(user, attrs) do

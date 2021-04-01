@@ -1,6 +1,8 @@
 defmodule ServerWeb.Resolvers.Content do
   alias Server.Portfolio.Stock
   alias Server.Account
+  alias ServerWeb.Email
+  alias ServerWeb.Mailer
 
   def list_stocks(_args, _resolution) do
     {:ok, Server.Portfolio.Stock |> Server.Repo.all()}
@@ -50,6 +52,21 @@ defmodule ServerWeb.Resolvers.Content do
       {:ok, {refresh, _}, {token, _}} -> {:ok, %{refresh: refresh, token: token}}
       {:error, error} -> {:error, error}
     end
+  end
+
+  def generate_reset_token(%{generate_reset_token: %{email: email}}, _resolution) do
+    with user <- Account.get_user_by_email(email) do
+      {:ok, user} = Account.set_token_on_user(user)
+      email
+        |> Email.password_reset_token_email(user.password_reset_token)
+        |> Mailer.deliver_now()
+      {:ok, %{user: user}}
+    end
+  end
+
+  def reset_password(%{ reset_password: reset_params}, _resolution) do
+    {:ok, user} = Account.update_user_password(reset_params)
+    {:ok, %{user: user}}
   end
 
   defp create_token(user) do

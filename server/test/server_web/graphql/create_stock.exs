@@ -14,15 +14,15 @@ defmodule ServerWeb.Graphql.CreateStockTest do
 
   test "stock" do
     input = %{
-      "input": %{
-        "user": %{ "name": "neil", "email": "neil@gmail.com", "password": "pw" }
+      "input" => %{
+        "user" => %{ "name" => "neil", "email" => "neil@gmail.com", "password" => "pw" }
       }
     }
 
     result = @query
       |> run([variables: input])
-      |> dig(:user)
+      |> dig(:createUser)
 
-    assert result == %{name: "neil", email: "neil@gmail.com"}
+    assert result == %{user: %{name: "neil", email: "neil@gmail.com"}}
   end
 end

@@ -48,7 +48,9 @@ defmodule Server.MixProject do
       {:absinthe_relay, "~> 1.5.0"},
       {:cors_plug, "~> 2.0"},
       {:guardian, "~> 2.0"},
-      {:comeonin, "~> 2.4.0"}
+      {:comeonin, "~> 2.4.0"},
+      {:bamboo, "~> 2.0.2"},
+      {:secure_random, "~> 0.5.1"}
     ]
   end
 

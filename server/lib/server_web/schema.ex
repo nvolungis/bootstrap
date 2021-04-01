@@ -75,6 +75,26 @@ defmodule ServerWeb.Schema do
       middleware fn(resolution, other) -> middlewares(resolution, other) end
     end
 
+    payload field :generate_reset_token do
+      input do
+        field :generate_reset_token, :generate_reset_token_input_object
+      end
+      output do
+        field :user, :user
+      end
+      resolve &Resolvers.Content.generate_reset_token/2
+    end
+
+    payload field :reset_password do
+      input do
+        field :reset_password, :reset_password_input_object
+      end
+      output do
+        field :user, :user
+      end
+      resolve &Resolvers.Content.reset_password/2
+    end
+
     payload field :logout do
       output do
         field :user, :user

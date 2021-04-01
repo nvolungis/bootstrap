@@ -13,10 +13,8 @@ defmodule Server.Support.GraphqlHelpers do
   def dig(%{data: data}, key), do: data[key]
 
   def run(query, options \\ []) do
-    IO.inspect options
     query
       |> Absinthe.run(ServerWeb.Schema, options)
-      |> IO.inspect
       |> keys_to_atoms()
   end
 end
