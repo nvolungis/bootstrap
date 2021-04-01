@@ -8,6 +8,7 @@ defmodule ServerWeb.Endpoint do
     plug Phoenix.Ecto.CheckRepoStatus, otp_app: :server
   end
 
+
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 

@@ -13,9 +13,14 @@ defmodule ServerWeb.Router do
       schema: ServerWeb.Schema,
       before_send: {__MODULE__, :before_send}
 
-    forward "/", Absinthe.Plug,
+    forward "/api", Absinthe.Plug,
       schema: ServerWeb.Schema,
       before_send: {__MODULE__, :before_send}
+  end
+
+  if Mix.env == :dev do
+    IO.inspect("DEV")
+    forward "/email", Bamboo.SentEmailViewerPlug
   end
 
   # take token from context and set it as a header
