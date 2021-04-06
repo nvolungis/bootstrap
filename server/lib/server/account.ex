@@ -80,4 +80,8 @@ defmodule Server.Account do
 
   def logout(_user) do
   end
+
+  def delete_all_users() do
+    Repo.delete_all(User)
+  end
 end

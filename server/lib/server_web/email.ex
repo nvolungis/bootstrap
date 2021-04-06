@@ -5,8 +5,8 @@ defmodule ServerWeb.Email do
     new_email(
       to: email,
       from: "support@server.com",
-      subject: "Password reset token",
-      html_body: "<stron>#{token}</strong>",
+      subject: "Reset your password",
+      html_body: "<a href=\"http://localhost:3000/reset-password/#{token}\">Reset your password</a></strong>",
       text_body: token
     )
   end

@@ -1,3 +1,7 @@
 .hex
 .mix
 node_modules
+.npm/
+.cache
+.config
+.pki

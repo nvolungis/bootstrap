@@ -18,7 +18,7 @@ defmodule Server.Support.Fixtures do
     {:ok, user} = attrs
       |> Enum.into(%{
         name: "name",
-        email: "name@mail.com",
+        email: "namefixture@mail.com",
         password: "pw"
       })
       |> Account.create_user()

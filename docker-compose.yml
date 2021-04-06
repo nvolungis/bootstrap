@@ -14,6 +14,7 @@ services:
     ports:
       - "4000:4000"
     command: ["/root/entrypoint.sh"]
+    container_name: "server"
     volumes:
       - ./server:/root/:cached
       - /root/deps/
@@ -33,6 +34,7 @@ services:
       - ./client:/root:cached
     working_dir: /root/
     command: ["sh", "-c", "yarn start-docker"]
+
   db:
     image: postgres:13.2
     environment:
@@ -44,6 +46,20 @@ services:
       - dbdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+
+  # cypress:
+  #   image: "cypress/included:4.0.2"
+  #   entrypoint: cypress open
+  #   volumes:
+  #     - ./e2e:/e2e
+  #     - /tmp/.X11-unix:/tmp/.X11-unix
+  #   working_dir: /e2e/
+  #   depends_on:
+  #     - server
+  #     - client
+  #   environment:
+  #     - CYPRESS_baseUrl=http://client:3000
+  #     - DISPLAY
 
 volumes:
   dbdata:

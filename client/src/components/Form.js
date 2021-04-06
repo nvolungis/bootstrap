@@ -2,7 +2,7 @@ import elements from '../elements';
 
 export const Form = ({ children, title, onSubmit }) => (
   <elements.FormContainer
-    onClick={(e) => {
+    onSubmit={(e) => {
       e.preventDefault();
       onSubmit();
     }}

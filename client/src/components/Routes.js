@@ -20,7 +20,7 @@ const Routes = () => (
         <Login path="/login" />
         <SignUp path="/signup" />
         <GenerateResetToken path="/generate-reset-token" />
-        <ResetPassword path="/reset-password" />
+        <ResetPassword path="/reset-password/:resetToken" />
         <ProtectedRoute as={Dashboard} path="/" />
         <ProtectedRoute as={Dashboard2} path="/dashboard" />
       </Router>

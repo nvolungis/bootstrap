@@ -19,8 +19,8 @@ defmodule ServerWeb.Router do
   end
 
   if Mix.env == :dev do
-    IO.inspect("DEV")
     forward "/email", Bamboo.SentEmailViewerPlug
+    forward "/email-api", Bamboo.SentEmailApiPlug
   end
 
   # take token from context and set it as a header

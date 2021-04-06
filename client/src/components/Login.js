@@ -20,7 +20,7 @@ const LoginMutation = gql`
 const PasswordReset = () => {
   return (
     <elements.FormError>
-      Trouble logging in? Try <Link to="/reset">Resetting password</Link>
+      Trouble logging in? Try <Link to="/generate-reset-token">Resetting password</Link>
     </elements.FormError>
   );
 };

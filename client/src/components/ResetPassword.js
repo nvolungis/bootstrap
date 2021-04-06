@@ -14,21 +14,24 @@ const ResetPasswordMutation = `
   }
 `
 
-const ResetPassword = () => {
-  const [password, setPassword] = useState();
-  const [passwordConfirmation, setPasswordConfirmation] = useState();
-  const { token } = useGlobalContext();
+const ResetPassword = ({ resetToken, navigate }) => {
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const { token, setFlash } = useGlobalContext();
   const [, reset] = useMutation(ResetPasswordMutation);
-  const reset_token = "SEhLT01aaGxmUWpZU05sTzJjY3hvUT09"
 
   if (token) {
     return <Redirect to="/" noThrow={true}/>
   }
 
   const onSubmit = () => {
-    const variables = { input: { resetPassword: { reset_token, password, passwordConfirmation } } };
+    const variables = { input: { resetPassword: { resetToken, password, passwordConfirmation } } };
     reset(variables).then(({data, error}) => {
-      console.log(data);
+      if (data) {
+        const { email } = data.resetPassword.user;
+        setFlash(`Password for ${email} has been reset`);
+        navigate('/login');
+      }
     });
   };
 

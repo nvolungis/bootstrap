@@ -16,7 +16,7 @@ const GenerateResetTokenMutation = `
 
 const GenerateResetToken = () => {
   const [email, setEmail] = useState();
-  const { token } = useGlobalContext();
+  const { token, setFlash } = useGlobalContext();
   const [, generateToken] = useMutation(GenerateResetTokenMutation);
 
   if (token) {
@@ -26,7 +26,10 @@ const GenerateResetToken = () => {
   const onSubmit = () => {
     const variables = { input: { generateResetToken: { email } } };
     generateToken(variables).then(({data, error}) => {
-      console.log(data);
+      if (data) {
+        const { email } = data.generateResetToken.user;
+        setFlash(`An email with instructions has been sent to ${email}.`);
+      }
     });
   };
 

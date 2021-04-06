@@ -7,6 +7,8 @@ const Provider = ({ children }) => {
     token: localStorage['token'],
     refresh: localStorage['refresh'],
   });
+
+  console.log('token', token, localStorage)
   const [flash, setFlash] = useState();
 
   const setTokensAndPersist = ({ token, refresh }) => {

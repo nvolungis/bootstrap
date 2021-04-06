@@ -24,7 +24,7 @@ const SignUp = ({ navigate }) => {
     const variables = { input: { user: { name, email, password } } };
     createUser(variables).then(({data}) => {
       setFlash(`User ${data.createUser.user.email} created`);
-      navigate('/login')
+      navigate('/login');
     });
   };
 
@@ -32,7 +32,7 @@ const SignUp = ({ navigate }) => {
     <Form title="Sign Up" onSubmit={onSubmit}>
       <FormGroup value={name} setValue={setName} label="Name" />
       <FormGroup value={email} setValue={setEmail} label="Email" />
-      <FormGroup value={password} setValue={setPassword} label="Password" />
+      <FormGroup value={password} setValue={setPassword} label="Password" type="password" />
       <FormSubmit />
     </Form>
   );
