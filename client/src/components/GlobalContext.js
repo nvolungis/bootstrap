@@ -2,35 +2,39 @@ import { createContext, useContext, useState } from 'react';
 
 const GlobalContext = createContext({});
 
+const safeSet = (key, value) => {
+  if (value === undefined || value === null) {
+    delete localStorage[key];
+  } else {
+    localStorage[key] = value;
+  }
+}
+
 const Provider = ({ children }) => {
-  const [{token, refresh}, setTokens] = useState({
+  const [{token, refresh, email, name}, setTokens] = useState({
     token: localStorage['token'],
     refresh: localStorage['refresh'],
+    name: localStorage['name'],
+    email: localStorage['email'],
   });
 
-  console.log('token', token, localStorage)
   const [flash, setFlash] = useState();
 
-  const setTokensAndPersist = ({ token, refresh }) => {
-    if (token === undefined || token === null) {
-      delete localStorage['token'];
-    } else {
-      localStorage['token'] = token;
-    }
+  const setTokensAndPersist = ({ token, refresh, email, name }) => {
+    safeSet('token', token);
+    safeSet('refresh', refresh);
+    safeSet('email', email);
+    safeSet('name', name);
 
-    if (refresh === undefined || refresh === null) {
-      delete localStorage['refresh'];
-    } else {
-      localStorage['refresh'] = refresh;
-    }
-
-    setTokens({ token, refresh });
+    setTokens({ token, refresh, email, name });
   }
 
   return (
     <GlobalContext.Provider value={{
       token,
       refresh,
+      email,
+      name,
       flash,
       setTokens: setTokensAndPersist,
       setFlash,

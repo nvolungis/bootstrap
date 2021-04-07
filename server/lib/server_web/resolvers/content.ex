@@ -70,7 +70,7 @@ defmodule ServerWeb.Resolvers.Content do
   end
 
   defp create_token(user) do
-    Server.Guardian.encode_and_sign(user, %{}, ttl: Application.get_env(:server, :token_ttl))
+    Server.Guardian.encode_and_sign(user, %{email: user.email, name: user.name}, ttl: Application.get_env(:server, :token_ttl))
   end
 
   defp create_refresh(user) do

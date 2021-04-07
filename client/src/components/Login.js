@@ -45,7 +45,14 @@ const Login = () => {
         return setLoginError(error.graphQLErrors.map(({message}) => message).join(', '));
       }
 
-      setTokens({ token: data.login.combinedToken, refresh: data.login.combinedRefresh });
+      const {email, name} = JSON.parse(atob(data.login.payloadToken));
+
+      setTokens({
+        token: data.login.combinedToken,
+        refresh: data.login.combinedRefresh,
+        email,
+        name,
+      });
     });
   };
 

@@ -1,4 +1,5 @@
 const { exec } = require("child_process");
+var path = require('path');
 
 /// <reference types="cypress" />
 // ***********************************************************
@@ -31,13 +32,15 @@ const perform = (cmd) => new Promise((resolve, reject) => {
   });
 });
 
-
-
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-  //
   on('task', {
     'run': perform,
+  });
+
+  on('before:browser:launch', (browser, launchOptions) => {
+    const extensionPath = path.resolve(__dirname, '../../urql-extension');
+    launchOptions.extensions.push(extensionPath);
+    launchOptions.args.push('--auto-open-devtools-for-tabs')
+    return launchOptions;
   });
 }

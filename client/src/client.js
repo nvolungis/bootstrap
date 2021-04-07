@@ -1,6 +1,7 @@
 import { createClient } from 'urql';
 import { makeOperation, fetchExchange } from '@urql/core';
 import { authExchange } from '@urql/exchange-auth';
+import { devtoolsExchange } from '@urql/devtools';
 
 const RefreshMutation = `
   mutation refreshMutation($input: RefreshInput!) {
@@ -36,7 +37,7 @@ const didAuthError = ({ error }) => {
   return error.graphQLErrors.some(e => e.message.includes('Not logged in'));
 };
 
-const getClient = (onAuthError, onRefresh) => {
+const getClient = ({ onAuthError, onRefresh }) => {
   const getAuth = async ({ authState, mutate }) => {
     if (!authState || !authState.token) {
       const token = localStorage['token'];
@@ -54,7 +55,6 @@ const getClient = (onAuthError, onRefresh) => {
     });
 
     if (data && data.refresh) {
-      console.log('got a refresh token', data);
       const token = data.refresh.combinedToken;
       const refresh = data.refresh.combinedRefresh;
       onRefresh({ token, refresh });
@@ -80,9 +80,10 @@ const getClient = (onAuthError, onRefresh) => {
     exchanges: [
       authExchange({ getAuth, addAuthToOperation, didAuthError}),
       fetchExchange,
+      devtoolsExchange,
     ],
     maskTypename: true,
-    // suspense: true,
+    suspense: true,
   });
 }
 

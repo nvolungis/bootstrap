@@ -1,16 +1,19 @@
 import '@testing-library/cypress/add-commands';
 
-// const login = () => fetch("http://localhost:4000/api", {
-//   "headers": 
-//   "method": "POST",
-//   "mode": "cors",
-//   "credentials": "include"
-// }).then(resp => resp.json());
-
-const headers = { "content-type": "application/json" };
-
-const body = "{\"query\":\"mutation loginMutation($input: LoginInput!) {\\n  login(input: $input) {\\n    headerToken\\n    payloadToken\\n    combinedToken\\n    headerRefresh\\n    payloadRefresh\\n    combinedRefresh\\n  }\\n}\\n\",\"operationName\":\"loginMutation\",\"variables\":{\"input\":{\"login\":{\"email\":\"namefixture@mail.com\",\"password\":\"pw\"}}}}"
-
+const body = {
+  query: `mutation loginMutation($input: LoginInput!) {
+    login(input: $input) {
+      headerToken
+      payloadToken
+      combinedToken
+      headerRefresh
+      payloadRefresh
+      combinedRefresh
+    }
+  }`,
+  operationName: "loginMutation",
+  variables: {input: {login:{email:"namefixture@mail.com","password":"pw"}}}
+};
 
 Cypress.Commands.add('login', () => {
   cy.window().then((window) => {
@@ -18,13 +21,15 @@ Cypress.Commands.add('login', () => {
       url: "http://localhost:4000/api",
       method: "POST",
       body,
-      headers
+      headers: { "content-type": "application/json" }
     })
     .its("body")
     .then(({data}) => {
+      const {email, name} = JSON.parse(atob(data.login.payloadToken));
       window.localStorage['token'] = data.login.combinedToken
       window.localStorage['refresh'] = data.login.combinedRefresh
-      // cy.reload()
+      window.localStorage['email'] = email
+      window.localStorage['name'] = name
     })
   })
 });
@@ -41,28 +46,3 @@ Cypress.Commands.add('visitResetLink', () => {
     cy.visit(resetLink)
   })
 });
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })

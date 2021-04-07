@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@urql/devtools": "^2.0.3",
     "babel-plugin-relay": "^11.0.0",
     "relay-compiler": "^11.0.0"
   }

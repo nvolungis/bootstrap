@@ -10,13 +10,27 @@ import { redirectTo } from '@reach/router';
 
 const Urql = ({ children, isLoggedIn }) => {
   const { setTokens } = useGlobalContext();
-  const client = useMemo(() =>
-    createClient(() => {
-      setTokens({});
-      redirectTo('/login');
-    }, (tokens) => {
-      setTokens(tokens);
-    }), [setTokens]);
+  const client = useMemo(() => {
+    const c = createClient({
+      onAuthError: () => {
+        setTokens({});
+        redirectTo('/login');
+      },
+      onRefresh: (tokens) => setTokens(tokens),
+    });
+
+    c.subscribeToDebugTarget(event => {
+      if (event.source === 'fetchExchange') {
+        if (event.type === "fetchSuccess") {
+          console.log(event.data.value.data)
+        }
+      }
+    });
+
+    return c
+  },
+  [setTokens]
+);
 
   return (
     <Provider value={client}>

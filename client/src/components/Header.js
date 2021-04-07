@@ -12,16 +12,19 @@ const NavList = styled.ul`
 
 const NavItem = styled.li`
   list-style-type: none;
-  & a, button {
+  & a, button, span {
     display: inline-block;
     padding: 10px;
     color: black;
     text-decoration: underline;
   }
+  & span {
+    text-decoration: none;
+  }
 `;
 
 const Header = () => {
-  const { token } = useGlobalContext();
+  const { token, email } = useGlobalContext();
 
   return (
     <header>
@@ -29,13 +32,13 @@ const Header = () => {
         {token ? (
           <NavList>
             <NavItem>
+              <span>{email}</span>
+            </NavItem>
+            <NavItem>
               <LogoutButton />
             </NavItem>
             <NavItem>
               <Link to="/">Dash</Link>
-            </NavItem>
-            <NavItem>
-              <Link to="/dashboard">Dash2</Link>
             </NavItem>
           </NavList>
         ): (

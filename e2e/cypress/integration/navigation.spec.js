@@ -15,5 +15,6 @@ context('navigation', () => {
     cy.location('pathname').should('equal', '/')
     cy.contains("Logout")
     cy.contains("Dash")
+    cy.contains("namefixture@mail.com")
   });
 });
