@@ -38,8 +38,6 @@ module.exports = (on, config) => {
   });
 
   on('before:browser:launch', (browser, launchOptions) => {
-    const extensionPath = path.resolve(__dirname, '../../urql-extension');
-    launchOptions.extensions.push(extensionPath);
     launchOptions.args.push('--auto-open-devtools-for-tabs')
     return launchOptions;
   });

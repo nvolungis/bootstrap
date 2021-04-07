@@ -19,13 +19,13 @@ const Urql = ({ children, isLoggedIn }) => {
       onRefresh: (tokens) => setTokens(tokens),
     });
 
-    c.subscribeToDebugTarget(event => {
-      if (event.source === 'fetchExchange') {
-        if (event.type === "fetchSuccess") {
-          console.log(event.data.value.data)
-        }
-      }
-    });
+    // c.subscribeToDebugTarget(event => {
+    //   if (event.source === 'fetchExchange') {
+    //     if (event.type === "fetchSuccess") {
+    //       console.log(event.data.value.data)
+    //     }
+    //   }
+    // });
 
     return c
   },

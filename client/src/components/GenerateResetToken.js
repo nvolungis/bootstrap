@@ -15,7 +15,7 @@ const GenerateResetTokenMutation = `
 `
 
 const GenerateResetToken = () => {
-  const [email, setEmail] = useState();
+  const [email, setEmail] = useState('');
   const { token, setFlash } = useGlobalContext();
   const [, generateToken] = useMutation(GenerateResetTokenMutation);
 
